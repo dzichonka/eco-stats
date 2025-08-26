@@ -1,3 +1,7 @@
+export interface EmissionsJson {
+  [country: string]: CountryData;
+}
+
 export interface CountryData {
   iso_code: string;
   data: YearlyRecord[];

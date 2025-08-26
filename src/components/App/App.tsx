@@ -1,5 +1,13 @@
+import { Suspense } from 'react';
+import EmissionsList from '@/components/EmissionsList/EmissionsList';
+import Loader from '../Loader/Loader';
+
 function App() {
-  return <h1 className="container">Eco Stats app</h1>;
+  return (
+    <Suspense fallback={<Loader />}>
+      <EmissionsList />
+    </Suspense>
+  );
 }
 
 export default App;
