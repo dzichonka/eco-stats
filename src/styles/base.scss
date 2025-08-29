@@ -32,7 +32,6 @@ body {
   max-width: 1000px;
   min-height: 100vh;
   margin: 0 auto;
-  background-color: vars.$color-transparent-black;
 }
 
 .section {
@@ -41,7 +40,7 @@ body {
   gap: 1rem;
   align-items: center;
   justify-content: start;
-  padding: 1rem;
+  padding: 0 1rem;
 }
 
 input,
@@ -75,4 +74,30 @@ select {
 
 .btn-icon {
   @include mixins.btn-icon;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background-color: vars.$color-transparent-black;
+}
+
+td {
+  padding: 0.5rem;
+  text-align: center;
+
+  &:nth-child(1) {
+    text-align: left;
+  }
+}
+
+th {
+  min-width: 5.5rem;
+  padding: 0.5rem;
+  font-weight: 600;
+  background-color: vars.$color-accent;
+}
+
+tr:nth-child(even) {
+  background-color: vars.$color-transparent-white;
 }
