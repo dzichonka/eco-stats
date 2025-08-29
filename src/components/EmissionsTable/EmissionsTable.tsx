@@ -1,5 +1,5 @@
 import type { EmissionsJson } from '@/types/types';
-import { useDeferredValue } from 'react';
+//import { useDeferredValue } from 'react';
 
 type EmissionsTableProps = {
   data: EmissionsJson;
@@ -7,7 +7,7 @@ type EmissionsTableProps = {
 
 const EmissionsTable = ({ data }: EmissionsTableProps) => {
   const arr = Object.entries(data);
-  const deferredData = useDeferredValue(arr);
+  //const deferredData = useDeferredValue(arr);
   return (
     <table className="relative">
       <caption>caption</caption>
@@ -22,7 +22,7 @@ const EmissionsTable = ({ data }: EmissionsTableProps) => {
         </tr>
       </thead>
       <tbody>
-        {deferredData.map(([country, countryData]) => (
+        {arr.map(([country, countryData]) => (
           <tr key={country}>
             <td>{country}</td>
             <td>{countryData.iso_code}</td>

@@ -1,11 +1,10 @@
-import { useEmissionsStore } from '@/store/useEmissionsStore';
+//import { useEmissionsStore } from '@/store/useEmissionsStore';
 import { use } from 'react';
-import EmissionsTable from '../EmissionsTable/EmissionsTable';
+import EmissionsTable from '@/components/EmissionsTable/EmissionsTable';
+import { getEmissions } from '@/resources/getEmissions';
 
 const EmissionsList = () => {
-  const fetchData = useEmissionsStore((s) => s.fetchData);
-  const data = use(fetchData());
-
+  const data = use(getEmissions());
   return <EmissionsTable data={data} />;
 };
 
