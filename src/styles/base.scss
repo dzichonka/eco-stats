@@ -17,16 +17,7 @@ html {
   font-style: normal;
 }
 
-body {
-  min-height: 100vh;
-  background-image: url('/images/bg.png');
-  background-repeat: repeat;
-  background-position: top left;
-  background-size: 500px 500px;
-}
-
 .container {
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   max-width: 1000px;
@@ -76,9 +67,45 @@ select {
 }
 
 table {
-  border-collapse: collapse;
-  width: 100%;
+  overflow: auto;
+  display: block;
+  border-spacing: 0;
+  border-collapse: separate;
+  max-width: 95vw;
+  max-height: 95vh;
+  margin: 0 auto;
+  border: solid 1px vars.$color-primary;
+}
+
+thead {
+  position: sticky;
+  z-index: 10;
+  top: 0;
+}
+
+th {
+  padding: 0.5rem;
+  border-bottom: solid 1px vars.$color-primary;
+  font-weight: 600;
+  background-color: vars.$color-accent;
+}
+
+tr {
   background-color: vars.$color-transparent-black;
+
+  & td:nth-child(1),
+  & td:nth-child(3) {
+    background-color: vars.$color-transparent-black;
+  }
+
+  &:nth-child(even) {
+    background-color: vars.$color-transparent-white;
+
+    & td:nth-child(1),
+    & td:nth-child(3) {
+      background-color: vars.$color-transparent-white;
+    }
+  }
 }
 
 td {
@@ -90,13 +117,25 @@ td {
   }
 }
 
-th {
-  min-width: 5.5rem;
-  padding: 0.5rem;
-  font-weight: 600;
-  background-color: vars.$color-accent;
+th:nth-child(1),
+td:nth-child(1) {
+  position: sticky;
+  z-index: 5;
+  left: 0;
+  min-width: 9rem;
+  border-right: solid 1px vars.$color-primary;
 }
 
-tr:nth-child(even) {
-  background-color: vars.$color-transparent-white;
+th:nth-child(2),
+td:nth-child(2) {
+  width: 4rem;
+  border-right: solid 1px vars.$color-primary;
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+  position: sticky;
+  left: 9rem;
+  width: 4rem;
+  border-right: solid 1px vars.$color-primary;
 }
