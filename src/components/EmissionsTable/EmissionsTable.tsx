@@ -4,44 +4,64 @@ import type {
   SortDirection,
   YearlyRecord,
 } from '@/types/types';
-import { useDeferredValue, useMemo, useState } from 'react';
+import { useDeferredValue, useEffect, useMemo, useState } from 'react';
 import { TiArrowSortedUp } from 'react-icons/ti';
 import { TiArrowSortedDown } from 'react-icons/ti';
 import { sortByCountry, sortByPopulation } from '@/utils/sort';
 import CountryData from '@/components/CountryData/CountryData';
+import Search from '@/components/Search/Search';
 
 type EmissionsTableProps = {
   data: EmissionsJson;
 };
 
 const EmissionsTable = ({ data }: EmissionsTableProps) => {
-  const arr = Object.entries(data);
+  const arr: [string, ICountryData][] = Object.entries(data);
   const deferredData = useDeferredValue(arr);
   const defaultYear =
     deferredData[0][1].data[deferredData[0][1].data.length - 1].year;
 
   const [selectedYear, setSelectedYear] = useState(defaultYear);
+  const [searchQuery, setSearchQuery] = useState('');
   const [sortConfig, setSortConfig] = useState<{
     type: 'country' | 'population';
     arr: [string, ICountryData][];
     year: number;
     direction: SortDirection;
-  } | null>(null);
+  } | null>({
+    type: 'country',
+    arr: deferredData,
+    year: 2024,
+    direction: 'asc',
+  });
+
+  const filteredData = useMemo(() => {
+    if (!searchQuery) return deferredData;
+    return deferredData.filter(([country]) =>
+      country.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [deferredData, searchQuery]);
+
+  useEffect(() => {
+    setSortConfig((prev) => (prev ? { ...prev, arr: filteredData } : null));
+  }, [filteredData]);
 
   const displayedData = useMemo(() => {
-    if (!sortConfig) return deferredData;
+    if (!sortConfig) return filteredData;
+
     if (sortConfig.type === 'country') {
       return sortByCountry(sortConfig);
     }
     if (sortConfig.type === 'population') {
       return sortByPopulation(sortConfig);
     }
-    return deferredData;
-  }, [deferredData, sortConfig]);
+
+    return filteredData;
+  }, [filteredData, sortConfig]);
   const handleCountrySort = (direction: SortDirection) => {
     setSortConfig({
       type: 'country',
-      arr: deferredData,
+      arr: displayedData,
       year: selectedYear,
       direction,
     });
@@ -49,7 +69,7 @@ const EmissionsTable = ({ data }: EmissionsTableProps) => {
   const handlePopulationSort = (direction: SortDirection) => {
     setSortConfig({
       type: 'population',
-      arr: deferredData,
+      arr: displayedData,
       year: selectedYear,
       direction,
     });
@@ -79,6 +99,7 @@ const EmissionsTable = ({ data }: EmissionsTableProps) => {
                 </button>
               </div>
             </div>
+            <Search onSearch={setSearchQuery} />
           </th>
           <th>
             iso <br />

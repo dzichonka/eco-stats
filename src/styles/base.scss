@@ -36,7 +36,6 @@ html {
 
 input,
 select {
-  width: 50px;
   padding: 0;
   border: none;
   font-size: 14px;
@@ -138,4 +137,22 @@ td:nth-child(3) {
   left: 9rem;
   width: 4rem;
   border-right: solid 1px vars.$color-primary;
+}
+
+@keyframes animate {
+  0% {
+    color: vars.$color-white;
+  }
+
+  50% {
+    color: vars.$color-accent;
+  }
+
+  100% {
+    color: vars.$color-primary;
+  }
+}
+
+.animate {
+  animation: animate 1s linear;
 }

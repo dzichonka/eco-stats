@@ -14,9 +14,9 @@ export interface YearlyRecord {
   co2_per_capita?: number;
   [key: string]: number | undefined;
 }
-export interface IDisplaydata {
+export interface IDisplayedData {
   country: string;
-  isoCode: string;
+  iso_code: string;
   year: number;
   population?: number;
   co2?: number;
