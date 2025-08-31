@@ -1,8 +1,11 @@
+import { useColumnsStore } from '@/store/columnsStore';
 import type { YearlyRecord } from '@/types/types';
 import { useEffect, useState } from 'react';
 
 const YearlyData = ({ record }: { record: YearlyRecord }) => {
-  const { year, population, co2, co2_per_capita } = record;
+  const { year, population, co2, co2_per_capita, ...rest } = record;
+
+  const { selectedColumns } = useColumnsStore();
   const safeValue = (value: unknown) =>
     value == null || value === ''
       ? 'N/A'
@@ -29,9 +32,9 @@ const YearlyData = ({ record }: { record: YearlyRecord }) => {
       <td style={highlight ? highlightStyle : undefined}>
         {safeValue(co2_per_capita)}
       </td>
-      {/* {Object.entries(rest).map(([key, value]) => (
-        <td key={key}>{value ?? 'N/A'}</td>
-      ))} */}
+      {selectedColumns.map((col) => (
+        <td key={col}>{safeValue(rest[col])}</td>
+      ))}
     </>
   );
 };

@@ -7,7 +7,7 @@ import ErrorMsg from '@/components/ErrorMsg/ErrorMsg';
 function App() {
   return (
     <div className="container">
-      <h1 className="section text-center text-2xl">Eco Stats App</h1>
+      <h1 className="section text-center text-3xl">Eco Stats App</h1>
       <ErrorBoundary fallback={<ErrorMsg />}>
         <Suspense fallback={<Loader />}>
           <EmissionsList />

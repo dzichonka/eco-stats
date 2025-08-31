@@ -21,7 +21,21 @@ export interface IDisplayedData {
   population?: number;
   co2?: number;
   co2_per_capita?: number;
+  gdp?: number;
+  methane?: number;
+  nitrous_oxide?: number;
+  total_ghg?: number;
+  cement_co2?: number;
+  oil_co2?: number;
   [key: string]: number | undefined;
 }
 
 export type SortDirection = 'asc' | 'desc';
+
+export type ExtraColumn =
+  | 'gdp'
+  | 'methane'
+  | 'nitrous_oxide'
+  | 'total_ghg'
+  | 'cement_co2'
+  | 'oil_co2';

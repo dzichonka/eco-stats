@@ -71,7 +71,7 @@ table {
   border-spacing: 0;
   border-collapse: separate;
   max-width: 95vw;
-  max-height: 95vh;
+  max-height: 90vh;
   margin: 0 auto;
   border: solid 1px vars.$color-primary;
 }
@@ -84,6 +84,7 @@ thead {
 
 th {
   padding: 0.5rem;
+  border-top: solid 1px vars.$color-primary;
   border-bottom: solid 1px vars.$color-primary;
   font-weight: 600;
   background-color: vars.$color-accent;

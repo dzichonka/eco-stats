@@ -4,12 +4,12 @@ import type {
   SortDirection,
   YearlyRecord,
 } from '@/types/types';
-import { useDeferredValue, useEffect, useMemo, useState } from 'react';
-import { TiArrowSortedUp } from 'react-icons/ti';
-import { TiArrowSortedDown } from 'react-icons/ti';
+import { useDeferredValue, useEffect, useState } from 'react';
+import { TiArrowSortedUp, TiArrowSortedDown } from 'react-icons/ti';
 import { sortByCountry, sortByPopulation } from '@/utils/sort';
 import CountryData from '@/components/CountryData/CountryData';
 import Search from '@/components/Search/Search';
+import { useColumnsStore } from '@/store/columnsStore';
 
 type EmissionsTableProps = {
   data: EmissionsJson;
@@ -20,59 +20,37 @@ const EmissionsTable = ({ data }: EmissionsTableProps) => {
   const deferredData = useDeferredValue(arr);
   const defaultYear =
     deferredData[0][1].data[deferredData[0][1].data.length - 1].year;
-
+  const [workigData, setWorkingData] = useState(deferredData);
   const [selectedYear, setSelectedYear] = useState(defaultYear);
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortConfig, setSortConfig] = useState<{
-    type: 'country' | 'population';
-    arr: [string, ICountryData][];
-    year: number;
-    direction: SortDirection;
-  } | null>({
-    type: 'country',
-    arr: deferredData,
-    year: 2024,
-    direction: 'asc',
-  });
 
-  const filteredData = useMemo(() => {
-    if (!searchQuery) return deferredData;
-    return deferredData.filter(([country]) =>
-      country.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [deferredData, searchQuery]);
+  const { selectedColumns, columnLabels } = useColumnsStore();
 
   useEffect(() => {
-    setSortConfig((prev) => (prev ? { ...prev, arr: filteredData } : null));
-  }, [filteredData]);
+    if (!searchQuery) return setWorkingData(deferredData);
+    const filteredData = deferredData.filter(([country]) =>
+      country.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setWorkingData(filteredData);
+  }, [selectedYear, searchQuery]);
 
-  const displayedData = useMemo(() => {
-    if (!sortConfig) return filteredData;
-
-    if (sortConfig.type === 'country') {
-      return sortByCountry(sortConfig);
-    }
-    if (sortConfig.type === 'population') {
-      return sortByPopulation(sortConfig);
-    }
-
-    return filteredData;
-  }, [filteredData, sortConfig]);
   const handleCountrySort = (direction: SortDirection) => {
-    setSortConfig({
-      type: 'country',
-      arr: displayedData,
-      year: selectedYear,
-      direction,
-    });
+    setWorkingData(
+      sortByCountry({
+        arr: workigData,
+        year: selectedYear,
+        direction,
+      })
+    );
   };
   const handlePopulationSort = (direction: SortDirection) => {
-    setSortConfig({
-      type: 'population',
-      arr: displayedData,
-      year: selectedYear,
-      direction,
-    });
+    setWorkingData(
+      sortByPopulation({
+        arr: workigData,
+        year: selectedYear,
+        direction,
+      })
+    );
   };
 
   return (
@@ -143,10 +121,13 @@ const EmissionsTable = ({ data }: EmissionsTableProps) => {
           </th>
           <th>co2</th>
           <th>co2 per capita</th>
+          {selectedColumns.map((col) => (
+            <th key={col}>{columnLabels[col]}</th>
+          ))}
         </tr>
       </thead>
       <tbody>
-        {displayedData.map(([country, countryData]) => {
+        {workigData.map(([country, countryData]) => {
           const record: YearlyRecord =
             countryData.data.find(
               (rec: YearlyRecord) => rec.year === selectedYear
