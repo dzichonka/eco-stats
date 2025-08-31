@@ -4,7 +4,7 @@ import type {
   SortDirection,
   YearlyRecord,
 } from '@/types/types';
-import { useDeferredValue, useEffect, useState } from 'react';
+import { useCallback, useDeferredValue, useMemo, useState } from 'react';
 import { TiArrowSortedUp, TiArrowSortedDown } from 'react-icons/ti';
 import { sortByCountry, sortByPopulation } from '@/utils/sort';
 import CountryData from '@/components/CountryData/CountryData';
@@ -20,38 +20,56 @@ const EmissionsTable = ({ data }: EmissionsTableProps) => {
   const deferredData = useDeferredValue(arr);
   const defaultYear =
     deferredData[0][1].data[deferredData[0][1].data.length - 1].year;
-  const [workigData, setWorkingData] = useState(deferredData);
+
+  const [sort, setSort] = useState({
+    type: 'country' as 'country' | 'population',
+    dir: 'asc' as SortDirection,
+  });
   const [selectedYear, setSelectedYear] = useState(defaultYear);
   const [searchQuery, setSearchQuery] = useState('');
 
   const { selectedColumns, columnLabels } = useColumnsStore();
 
-  useEffect(() => {
-    if (!searchQuery) return setWorkingData(deferredData);
-    const filteredData = deferredData.filter(([country]) =>
+  const filteredData = useMemo(() => {
+    if (!searchQuery) return deferredData;
+
+    return deferredData.filter(([country]) =>
       country.toLowerCase().includes(searchQuery.toLowerCase())
     );
-    setWorkingData(filteredData);
-  }, [selectedYear, searchQuery]);
+  }, [deferredData, searchQuery]);
 
-  const handleCountrySort = (direction: SortDirection) => {
-    setWorkingData(
-      sortByCountry({
-        arr: workigData,
+  const sortedData = useMemo(() => {
+    let data = [...filteredData];
+
+    if (sort.type === 'country') {
+      data = sortByCountry({
+        arr: data,
         year: selectedYear,
-        direction,
-      })
-    );
-  };
-  const handlePopulationSort = (direction: SortDirection) => {
-    setWorkingData(
-      sortByPopulation({
-        arr: workigData,
+        direction: sort.dir,
+      });
+    }
+    if (sort.type === 'population') {
+      data = sortByPopulation({
+        arr: data,
         year: selectedYear,
-        direction,
-      })
-    );
-  };
+        direction: sort.dir,
+      });
+    }
+
+    return data;
+  }, [filteredData, sort, selectedYear]);
+
+  const handleCountrySort = useCallback((direction: SortDirection) => {
+    setSort({ type: 'country', dir: direction });
+  }, []);
+
+  const handlePopulationSort = useCallback((direction: SortDirection) => {
+    setSort({ type: 'population', dir: direction });
+  }, []);
+
+  const handleSearch = useCallback((query: string) => {
+    setSearchQuery(query);
+  }, []);
 
   return (
     <table>
@@ -77,7 +95,7 @@ const EmissionsTable = ({ data }: EmissionsTableProps) => {
                 </button>
               </div>
             </div>
-            <Search onSearch={setSearchQuery} />
+            <Search onSearch={handleSearch} />
           </th>
           <th>
             iso <br />
@@ -127,7 +145,7 @@ const EmissionsTable = ({ data }: EmissionsTableProps) => {
         </tr>
       </thead>
       <tbody>
-        {workigData.map(([country, countryData]) => {
+        {sortedData.map(([country, countryData]) => {
           const record: YearlyRecord =
             countryData.data.find(
               (rec: YearlyRecord) => rec.year === selectedYear
