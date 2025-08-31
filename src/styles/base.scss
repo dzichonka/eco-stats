@@ -1,0 +1,159 @@
+@use './fonts.scss' as fonts;
+@use './variables.scss' as vars;
+@use './mixins.scss' as mixins;
+
+html {
+  font-size: 16px;
+  color: vars.$color-primary;
+  background-color: vars.$color-black;
+}
+
+* {
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+  margin: 0;
+  font-family: fonts.$font-family;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: 1000px;
+  min-height: 100vh;
+  margin: 0 auto;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: start;
+  padding: 0 1rem;
+}
+
+input,
+select {
+  padding: 0;
+  border: none;
+  font-size: 14px;
+  appearance: none;
+  outline: none;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  appearance: inner-spin-button;
+  opacity: 1;
+}
+
+select {
+  padding-right: 30px;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+}
+
+.btn {
+  @include mixins.btn;
+}
+
+.btn-icon {
+  @include mixins.btn-icon;
+}
+
+table {
+  overflow: auto;
+  display: block;
+  border-spacing: 0;
+  border-collapse: separate;
+  max-width: 95vw;
+  max-height: 90vh;
+  margin: 0 auto;
+  border: solid 1px vars.$color-primary;
+}
+
+thead {
+  position: sticky;
+  z-index: 10;
+  top: 0;
+}
+
+th {
+  padding: 0.5rem;
+  border-top: solid 1px vars.$color-primary;
+  border-bottom: solid 1px vars.$color-primary;
+  font-weight: 600;
+  background-color: vars.$color-accent;
+}
+
+tr {
+  background-color: vars.$color-transparent-black;
+
+  & td:nth-child(1),
+  & td:nth-child(3) {
+    background-color: vars.$color-transparent-black;
+  }
+
+  &:nth-child(even) {
+    background-color: vars.$color-transparent-white;
+
+    & td:nth-child(1),
+    & td:nth-child(3) {
+      background-color: vars.$color-transparent-white;
+    }
+  }
+}
+
+td {
+  padding: 0.5rem;
+  text-align: center;
+
+  &:nth-child(1) {
+    text-align: left;
+  }
+}
+
+th:nth-child(1),
+td:nth-child(1) {
+  position: sticky;
+  z-index: 5;
+  left: 0;
+  min-width: 9rem;
+  border-right: solid 1px vars.$color-primary;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+  width: 4rem;
+  border-right: solid 1px vars.$color-primary;
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+  position: sticky;
+  left: 9rem;
+  width: 4rem;
+  border-right: solid 1px vars.$color-primary;
+}
+
+@keyframes animate {
+  0% {
+    color: vars.$color-white;
+  }
+
+  50% {
+    color: vars.$color-accent;
+  }
+
+  100% {
+    color: vars.$color-primary;
+  }
+}
+
+.animate {
+  animation: animate 1s linear;
+}
