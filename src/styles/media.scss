@@ -1,0 +1,16 @@
+@media (width <= 768px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (width <= 390px) {
+  html {
+    font-size: 10px;
+  }
+
+  th:nth-child(3),
+  td:nth-child(3) {
+    position: static;
+  }
+}

@@ -1,0 +1,66 @@
+@use '@/styles/mixins' as mixins;
+@use '@/styles/variables' as vars;
+
+.toggler {
+  position: relative;
+  display: block;
+  padding: 1rem 0 2rem;
+}
+
+.input {
+  display: none;
+}
+
+.state {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.control {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 2.5rem;
+  height: 1.3rem;
+  padding: 1px;
+  border: 2px solid vars.$color-transparent-white;
+  border-radius: 1rem;
+}
+
+.switch {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: vars.$color-transparent-white;
+  transition: background-color 0.3s ease-out;
+}
+
+.title {
+  color: vars.$color-primary;
+}
+
+.input:checked ~ .state .control {
+  justify-content: flex-end;
+  border-color: vars.$color-primary;
+  background-color: vars.$color-primary;
+}
+
+.input:checked ~ .state .control .switch {
+  background-color: vars.$color-transparent-white;
+}
+
+.input:focus ~ .state .title {
+  text-decoration: underline;
+}
+
+.input:disabled ~ .state .control {
+  cursor: default;
+  background-color: vars.$color-transparent-white;
+}
+
+.input:disabled ~ .state .control .switch {
+  cursor: default;
+  background-color: vars.$color-transparent-white;
+}
